@@ -1,0 +1,129 @@
+/* PromptForge 全局样式 — 苹果风格极简设计 */
+/* 规范来源: dev-docs/06-UI设计规范.md */
+
+:root {
+  /* 色彩系统 */
+  --bg-primary: #F5F5F7;
+  --bg-card: #FFFFFF;
+  --bg-input: #F5F5F7;
+  --bg-input-focus: #E8E8ED;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --accent-blue: #0071E3;
+  --accent-blue-hover: #0077ED;
+  --success-green: #34C759;
+  --error-red: #FF3B30;
+
+  /* 字体 */
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+
+  /* 字号层级 */
+  --font-h1: 34px;
+  --font-h2: 24px;
+  --font-h3: 20px;
+  --font-body: 17px;
+  --font-caption: 14px;
+
+  /* 间距（8px 倍数） */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* 圆角 */
+  --radius-card: 12px;
+  --radius-input: 8px;
+  --radius-button: 980px;
+
+  /* 阴影 */
+  --shadow-default: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* 动画 */
+  --transition-default: all 0.2s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 苹果风格按钮 */
+.apple-btn {
+  padding: 12px 24px;
+  border-radius: var(--radius-button);
+  font-size: var(--font-body);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-default);
+  font-family: var(--font-family);
+}
+
+.apple-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.apple-btn.primary {
+  background: var(--accent-blue);
+  color: white;
+}
+
+.apple-btn.primary:hover:not(:disabled) {
+  background: var(--accent-blue-hover);
+  transform: scale(1.02);
+}
+
+.apple-btn.secondary {
+  background: transparent;
+  color: var(--accent-blue);
+}
+
+.apple-btn.secondary:hover:not(:disabled) {
+  background: rgba(0, 113, 227, 0.08);
+  transform: scale(1.02);
+}
+
+/* 苹果风格输入框 */
+.apple-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: var(--font-body);
+  font-family: var(--font-family);
+  border: none;
+  border-radius: var(--radius-input);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  outline: none;
+  transition: var(--transition-default);
+}
+
+.apple-input:focus {
+  background: var(--bg-input-focus);
+}
+
+.apple-input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* 苹果风格卡片 */
+.apple-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-default);
+  transition: var(--transition-default);
+}
