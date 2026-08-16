@@ -24,6 +24,10 @@
           在 <a href="https://platform.deepseek.com/" target="_blank">platform.deepseek.com</a> 申请。
           Key 只保存在本机，不会上传到其他服务。
         </p>
+        <p class="field-hint">
+          💾 配置会自动保存，重启应用无需重新设置。配置文件位置：
+          <code class="path-code">C:\Users\你的用户名\AppData\Roaming\com.promptforge.app\settings.json</code>
+        </p>
 
         <p v-if="error" class="error-text">{{ error }}</p>
         <p v-if="success" class="success-text">✓ 保存成功</p>
@@ -180,6 +184,17 @@ async function save() {
   font-size: var(--font-caption);
   color: var(--text-secondary);
   line-height: 1.5;
+}
+
+.path-code {
+  display: block;
+  margin-top: var(--space-xs);
+  background: var(--bg-input);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  word-break: break-all;
+  user-select: text;
 }
 
 .field-hint a {

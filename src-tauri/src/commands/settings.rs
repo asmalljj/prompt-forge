@@ -1,3 +1,4 @@
+use crate::config;
 use crate::error::ApiResponse;
 use crate::settings;
 use serde::{Deserialize, Serialize};
@@ -20,6 +21,7 @@ pub struct SaveSettingsRequest {
 }
 
 /// 获取设置状态（是否已配置 API Key）
+/// 检测逻辑与实际使用逻辑一致：应用内设置优先，其次 .env 环境变量
 #[tauri::command]
 pub async fn get_settings(app: AppHandle) -> Result<ApiResponse<SettingsResponse>, String> {
     let config_dir = app
@@ -27,21 +29,18 @@ pub async fn get_settings(app: AppHandle) -> Result<ApiResponse<SettingsResponse
         .app_config_dir()
         .map_err(|e| format!("获取配置目录失败: {}", e))?;
 
-    log::info!("get_settings: config_dir = {:?}", config_dir);
-
     let settings = settings::load(&config_dir);
 
-    log::info!(
-        "get_settings: has_api_key = {:?}",
-        settings.deepseek_api_key.as_deref().map(|k| !k.is_empty())
-    );
+    // 与应用内配置或 .env 环境变量任一存在即视为已配置
+    let has_api_key = settings
+        .deepseek_api_key
+        .map(|k| !k.is_empty())
+        .unwrap_or(false)
+        || !config::get().deepseek_api_key.is_empty();
 
-    Ok(ApiResponse::success(SettingsResponse {
-        has_api_key: settings
-            .deepseek_api_key
-            .map(|k| !k.is_empty())
-            .unwrap_or(false),
-    }))
+    log::info!("get_settings: has_api_key = {}", has_api_key);
+
+    Ok(ApiResponse::success(SettingsResponse { has_api_key }))
 }
 
 /// 保存 API Key 设置
