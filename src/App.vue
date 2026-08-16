@@ -23,6 +23,7 @@
           :disabled="loading"
           placeholder="输入你的大白话提示词，例如：帮我写一个介绍 Vue 的文案"
           show-char-count
+          @submit="optimize"
         />
         <div class="input-actions">
           <StyleSelector v-model="style" />
@@ -154,11 +155,11 @@ async function optimize() {
   gap: var(--space-xl);
 }
 
-/* 顶部栏 */
+/* 顶部栏：标题居中，设置按钮固定右上角 */
 .top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: relative;
+  text-align: center;
+  padding-top: var(--space-md);
 }
 
 .top-bar h1 {
@@ -168,6 +169,9 @@ async function optimize() {
 }
 
 .settings-btn {
+  position: absolute;
+  top: var(--space-md);
+  right: 0;
   border: none;
   background: var(--bg-input);
   width: 36px;

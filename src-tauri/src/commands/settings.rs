@@ -27,7 +27,14 @@ pub async fn get_settings(app: AppHandle) -> Result<ApiResponse<SettingsResponse
         .app_config_dir()
         .map_err(|e| format!("获取配置目录失败: {}", e))?;
 
+    log::info!("get_settings: config_dir = {:?}", config_dir);
+
     let settings = settings::load(&config_dir);
+
+    log::info!(
+        "get_settings: has_api_key = {:?}",
+        settings.deepseek_api_key.as_deref().map(|k| !k.is_empty())
+    );
 
     Ok(ApiResponse::success(SettingsResponse {
         has_api_key: settings

@@ -7,6 +7,11 @@
       </div>
 
       <div class="modal-body">
+        <!-- 当前配置状态 -->
+        <p v-if="alreadyConfigured" class="configured-status">
+          ✓ 已配置 API Key，如更换请直接输入新的 Key
+        </p>
+
         <label class="field-label">DeepSeek API Key</label>
         <input
           v-model="apiKey"
@@ -50,6 +55,19 @@ const apiKey = ref<string>("");
 const saving = ref<boolean>(false);
 const error = ref<string>("");
 const success = ref<boolean>(false);
+const alreadyConfigured = ref<boolean>(false);
+
+// 打开时检查是否已配置
+(async () => {
+  try {
+    const response = await invoke<{ success: boolean; data?: { hasApiKey: boolean } }>(
+      "get_settings"
+    );
+    alreadyConfigured.value = response.success && !!response.data?.hasApiKey;
+  } catch {
+    alreadyConfigured.value = false;
+  }
+})();
 
 function close() {
   emit("saved");
@@ -172,6 +190,14 @@ async function save() {
 .error-text {
   font-size: var(--font-caption);
   color: var(--error-red);
+}
+
+.configured-status {
+  font-size: var(--font-caption);
+  color: var(--success-green);
+  background: rgba(52, 199, 89, 0.1);
+  padding: 8px 12px;
+  border-radius: var(--radius-input);
 }
 
 .success-text {

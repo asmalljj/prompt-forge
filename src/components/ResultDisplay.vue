@@ -55,11 +55,32 @@ watch(
   }
 );
 
+// 清洗复制内容：去除 AI 偶尔会加的前言文字，只保留提示词正文
+function cleanCopyContent(raw: string): string {
+  // 常见前言特征：以"根据你的需求/为你优化/以下是/好的"等开头，或包含分隔线
+  const cleaned = raw
+    // 去掉开头的固定前言行（如"根据你的需求，我为你优化了如下提示词"）
+    .replace(/^[^\n]*为你优化[^\n]*\n?/, "")
+    .replace(/^[^\n]*根据你的需求[^\n]*\n?/, "")
+    .replace(/^[^\n]*以下是[^\n]*\n?/, "")
+    // 去掉开头和中间的分隔线（--- 或 ***）
+    .replace(/^-{3,}\s*\n?/gm, "")
+    .replace(/^\*{3,}\s*\n?/gm, "")
+    // 去掉"# 优化后的提示词"之类的标题行
+    .replace(/^#{1,6}\s*[^\n]*\n?/gm, "")
+    // 清理开头空行
+    .trim();
+
+  // 清洗后为空则返回原文（避免误删正文）
+  return cleaned || raw;
+}
+
 async function copyContent() {
   if (!props.content) return;
 
   try {
-    await navigator.clipboard.writeText(props.content);
+    const cleanContent = cleanCopyContent(props.content);
+    await navigator.clipboard.writeText(cleanContent);
     copied.value = true;
     // 2 秒后恢复按钮状态
     setTimeout(() => {
