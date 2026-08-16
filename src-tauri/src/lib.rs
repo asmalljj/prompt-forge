@@ -2,6 +2,7 @@ mod commands;
 mod config;
 mod error;
 mod services;
+mod settings;
 mod state;
 
 use tauri_plugin_log::{Target, TargetKind};
@@ -31,6 +32,8 @@ pub fn run() {
             commands::health::check_health,
             commands::optimize::optimize_prompt,
             commands::hello::hello,
+            commands::settings::get_settings,
+            commands::settings::save_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running prompt-forge application");

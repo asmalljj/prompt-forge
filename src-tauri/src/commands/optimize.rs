@@ -1,8 +1,9 @@
 use crate::config;
 use crate::error::{AppError, ApiResponse};
 use crate::services::deepseek;
+use crate::settings;
 use serde::{Deserialize, Serialize};
-use tauri::State;
+use tauri::{AppHandle, Manager, State};
 
 /// 优化风格
 #[derive(Debug, Deserialize, Serialize)]
@@ -40,6 +41,7 @@ pub struct OptimizeResponse {
 /// 将大白话提示词优化为高质量提示词
 #[tauri::command]
 pub async fn optimize_prompt(
+    app: AppHandle,
     request: OptimizeRequest,
     state: State<'_, crate::state::AppState>,
 ) -> Result<ApiResponse<OptimizeResponse>, AppError> {
@@ -49,9 +51,22 @@ pub async fn optimize_prompt(
     // 获取配置
     let config = config::get();
 
+    // 获取 API Key：优先应用内保存的设置，其次 .env 环境变量
+    let config_dir = app
+        .path()
+        .app_config_dir()
+        .map_err(|e| AppError::Config(format!("获取配置目录失败: {}", e)))?;
+    let saved_settings = settings::load(&config_dir);
+    let api_key = saved_settings
+        .deepseek_api_key
+        .filter(|k| !k.is_empty())
+        .unwrap_or_else(|| config.deepseek_api_key.clone());
+
     // 检查 API Key
-    if config.deepseek_api_key.is_empty() {
-        return Err(AppError::Config("DEEPSEEK_API_KEY 未配置".to_string()));
+    if api_key.is_empty() {
+        return Err(AppError::Config(
+            "未配置 API Key，请点击右上角设置按钮进行配置".to_string(),
+        ));
     }
 
     // 构建系统提示词
@@ -59,7 +74,7 @@ pub async fn optimize_prompt(
 
     // 调用 DeepSeek API
     let optimized = deepseek::call_api(
-        &config.deepseek_api_key,
+        &api_key,
         &config.deepseek_base_url,
         &config.deepseek_model,
         &system_prompt,

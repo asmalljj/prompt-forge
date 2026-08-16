@@ -1,3 +1,4 @@
 pub mod health;
-pub mod optimize;
 pub mod hello;
+pub mod optimize;
+pub mod settings;
