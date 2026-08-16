@@ -2,6 +2,8 @@
 
 提示词优化工具 — 输入大白话，输出 AI 更能理解的高质量提示词。
 
+有好的功能建议请发送邮箱至：653595478@qq.com
+
 ## 功能特性
 
 - ✨ **一键优化**：调用 DeepSeek API，把大白话提示词优化成高质量提示词
@@ -11,11 +13,11 @@
 
 ## 技术栈
 
-| 层级 | 技术 |
-|------|------|
-| 桌面框架 | [Tauri](https://tauri.app/) v2 |
-| 前端框架 | [Vue 3](https://vuejs.org/) + TypeScript |
-| 构建工具 | Vite |
+| 层级    | 技术                                             |
+| ----- | ---------------------------------------------- |
+| 桌面框架  | [Tauri](https://tauri.app/) v2                 |
+| 前端框架  | [Vue 3](https://vuejs.org/) + TypeScript       |
+| 构建工具  | Vite                                           |
 | AI 后端 | [DeepSeek API](https://platform.deepseek.com/) |
 
 ## 环境要求
